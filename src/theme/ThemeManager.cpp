@@ -7,6 +7,22 @@
 #include <QTextStream>
 #include <QDebug>
 
+// Ensure the DLL's Qt resources (:/themes, :/icons) are registered when the
+// library is loaded.  This is only needed when the library is built as a
+// shared library; for static builds Qt links the resources automatically.
+#if !defined(QTHEMELIB_STATIC)
+static void initQThemeResources()
+{
+    Q_INIT_RESOURCE(qthemelib_resources);
+}
+
+namespace {
+struct ResourceInitializer {
+    ResourceInitializer() { initQThemeResources(); }
+} s_resourceInit;
+} // namespace
+#endif
+
 // ─────────────────────────────────────────────────────────────────────────────
 ThemeManager::ThemeManager() = default;
 
@@ -17,6 +33,12 @@ ThemeManager& ThemeManager::instance()
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+void ThemeManager::initialize()
+{
+    // Default: load themes embedded in the DLL's Qt resources
+    loadThemesFromDir(QStringLiteral(":/themes"));
+}
+
 void ThemeManager::initialize(const QString& themesDir)
 {
     loadThemesFromDir(themesDir);

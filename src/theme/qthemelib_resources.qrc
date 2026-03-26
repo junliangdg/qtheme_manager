@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/themes">
+        <file alias="blue_business.qss">themes/blue_business.qss</file>
+        <file alias="dark_pro.qss">themes/dark_pro.qss</file>
+        <file alias="glass_futuristic.qss">themes/glass_futuristic.qss</file>
+        <file alias="green_eye.qss">themes/green_eye.qss</file>
+        <file alias="high_contrast.qss">themes/high_contrast.qss</file>
+        <file alias="light_minimal.qss">themes/light_minimal.qss</file>
+        <file alias="soft_rounded.qss">themes/soft_rounded.qss</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="arrow_down_dark.svg">../../resources/icons/arrow_down_dark.svg</file>
+        <file alias="arrow_down_light.svg">../../resources/icons/arrow_down_light.svg</file>
+        <file alias="arrow_up_dark.svg">../../resources/icons/arrow_up_dark.svg</file>
+        <file alias="arrow_up_light.svg">../../resources/icons/arrow_up_light.svg</file>
+        <file alias="check_white.svg">../../resources/icons/check_white.svg</file>
+        <file alias="check_dark.svg">../../resources/icons/check_dark.svg</file>
+        <file alias="radio_dot_white.svg">../../resources/icons/radio_dot_white.svg</file>
+        <file alias="radio_dot_dark.svg">../../resources/icons/radio_dot_dark.svg</file>
+        <file alias="branch_closed_dark.svg">../../resources/icons/branch_closed_dark.svg</file>
+        <file alias="branch_open_dark.svg">../../resources/icons/branch_open_dark.svg</file>
+        <file alias="branch_closed_light.svg">../../resources/icons/branch_closed_light.svg</file>
+        <file alias="branch_open_light.svg">../../resources/icons/branch_open_light.svg</file>
+        <file alias="close_dark.svg">../../resources/icons/close_dark.svg</file>
+        <file alias="close_light.svg">../../resources/icons/close_light.svg</file>
+        <file alias="undock_dark.svg">../../resources/icons/undock_dark.svg</file>
+        <file alias="undock_light.svg">../../resources/icons/undock_light.svg</file>
+        <file alias="toolbar_handle.svg">../../resources/icons/toolbar_handle.svg</file>
+    </qresource>
+</RCC>

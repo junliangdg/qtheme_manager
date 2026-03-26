@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QDir>
 
 #include "ThemeManager.h"
 #include "ThemeRegistry.h"
@@ -18,41 +17,17 @@ int main(int argc, char* argv[])
     app.setApplicationVersion("1.0.0");
     app.setOrganizationName("QThemeManager");
 
-    // ── Locate themes directory ──────────────────────────────
-    // Search order:
-    //   1. Executable directory/themes  (deployed / CMake post-build copy)
-    //   2. Walk up from exe to find src/theme/themes  (development build)
-    QString themesPath;
-
-    const QString exeDir = QCoreApplication::applicationDirPath();
-    if (QDir(exeDir + "/themes").exists()) {
-        themesPath = exeDir + "/themes";
-    } else {
-        QDir d(exeDir);
-        for (int i = 0; i < 6; ++i) {
-            if (QDir(d.absolutePath() + "/src/theme/themes").exists()) {
-                themesPath = d.absolutePath() + "/src/theme/themes";
-                break;
-            }
-            d.cdUp();
-        }
-    }
-
-    if (themesPath.isEmpty()) {
-        qWarning("Could not locate themes directory. Themes will not load.");
-    }
-
     // ── Register theme metadata (ThemeRegistry) ──────────────
+    // Provides display names, descriptions, and color hints for the UI picker.
     ThemeRegistry::registerBuiltinThemes();
 
-    // ── Load .qss files into ThemeManager ────────────────────
-    ThemeManager& tm = ThemeManager::instance();
-    if (!themesPath.isEmpty()) {
-        tm.initialize(themesPath);   // scans dir, registers all .qss files
-    }
+    // ── Load embedded themes from QThemeLib.dll ───────────────
+    // All .qss files are compiled into the DLL as Qt resources (:/themes/).
+    // No external files or post-build copies are needed.
+    ThemeManager::instance().initialize();
 
     // ── Apply default theme ──────────────────────────────────
-    tm.applyTheme(&app, "dark_pro");
+    ThemeManager::instance().applyTheme(&app, "dark_pro");
 
     // ── Launch main window ───────────────────────────────────
     MainWindow window;

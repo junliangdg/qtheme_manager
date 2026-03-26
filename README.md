@@ -1,7 +1,9 @@
 # QTheme Manager
 
-A modern, reusable **QSS theme library** for Qt Widgets applications.  
-Provides 7 professionally designed themes, a clean theme management API, and a full-featured demo application.
+A modern, reusable **QSS theme library** for Qt Widgets applications, distributed as a **shared library (DLL / .so / .dylib)**.  
+Provides 7 professionally designed themes, a clean theme management API, and an optional full-featured demo application.
+
+All themes and icon assets are **compiled into the library** as Qt resources — no external files are needed at runtime.
 
 ---
 
@@ -10,10 +12,10 @@ Provides 7 professionally designed themes, a clean theme management API, and a f
 - **7 built-in themes** with distinct visual styles
 - **ThemeManager** singleton — load, register, and apply themes with one call
 - **ThemeRegistry** — structured metadata for building theme picker UIs
-- **File-based QSS** — themes live in `.qss` files, easy to edit without recompiling
+- **Embedded resources** — QSS files and SVG icons compiled into `QThemeLib.dll` (no loose files at runtime)
 - **Qt5 & Qt6 compatible** — single CMakeLists.txt handles both
+- **Submodule-friendly** — set `QTHEME_BUILD_DEMO=OFF` to build only the library
 - **Full demo app** — showcases all themes across 6 widget category pages
-- **Reusable module** — drop `src/theme/` into any Qt Widgets project
 
 ---
 
@@ -89,13 +91,13 @@ The demo and QSS themes cover:
 - Qt 5.15+ **or** Qt 6.x (auto-detected)
 - C++17 compiler
 
-### Build steps
+### Build steps (standalone)
 
 ```bash
-# Clone / open the project
+# Clone the project
 cd qtheme_manager
 
-# Configure
+# Configure — builds QThemeLib.dll + QThemeDemo by default
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 
 # Build
@@ -103,41 +105,39 @@ cmake --build build --config Release
 
 # Run the demo
 ./build/QThemeDemo          # Linux/macOS
-build\Release\QThemeDemo.exe  # Windows
+build\QThemeDemo.exe        # Windows (QThemeLib.dll is copied automatically)
 ```
 
-The CMake post-build step automatically copies the `themes/` directory next to the executable.
+### Build only the library (no demo)
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DQTHEME_BUILD_DEMO=OFF
+cmake --build build --config Release
+```
 
 ---
 
-## 🔌 Integrating into Your Qt Project
+## 🔌 Using as a Git Submodule
 
-### Step 1 — Copy the theme module
+### Step 1 — Add the submodule
 
-Copy these files into your project:
-
-```
-src/theme/
-  ThemeManager.h
-  ThemeManager.cpp
-  ThemeRegistry.h
-  ThemeRegistry.cpp
-  themes/
-    *.qss
+```bash
+git submodule add https://github.com/junliangdg/qtheme_manager.git third_party/qtheme_manager
+git submodule update --init
 ```
 
-### Step 2 — Add to CMakeLists.txt
+### Step 2 — Add to your CMakeLists.txt
 
 ```cmake
-add_library(QThemeLib STATIC
-    src/theme/ThemeManager.cpp
-    src/theme/ThemeRegistry.cpp
-)
-target_include_directories(QThemeLib PUBLIC src/theme)
-target_link_libraries(QThemeLib PUBLIC Qt6::Core Qt6::Widgets)
+# Build only the DLL, skip the demo
+add_subdirectory(third_party/qtheme_manager EXCLUDE_FROM_ALL)
+set(QTHEME_BUILD_DEMO OFF CACHE BOOL "" FORCE)
 
+# Link your application against QThemeLib
 target_link_libraries(YourApp PRIVATE QThemeLib)
 ```
+
+> **Note:** `QTHEME_BUILD_DEMO` must be set **before** `add_subdirectory`, or use the `CACHE … FORCE` form shown above.
 
 ### Step 3 — Initialize at startup
 
@@ -151,8 +151,8 @@ int main(int argc, char* argv[]) {
     // Register metadata (optional, for UI pickers)
     ThemeRegistry::registerBuiltinThemes();
 
-    // Load all .qss files from a directory
-    ThemeManager::instance().initialize("/path/to/themes");
+    // Load all themes embedded in QThemeLib (:/themes/)
+    ThemeManager::instance().initialize();
 
     // Apply a theme
     ThemeManager::instance().applyTheme(&app, "dark_pro");
@@ -160,6 +160,8 @@ int main(int argc, char* argv[]) {
     // ...
 }
 ```
+
+No `.qss` files need to be copied — everything is embedded in the DLL.
 
 ### Step 4 — Switch themes at runtime
 
@@ -182,16 +184,55 @@ connect(&ThemeManager::instance(), &ThemeManager::themeChanged,
 
 ---
 
+## 🔌 Integrating without Git Submodule (copy-in)
+
+If you prefer to copy the source directly:
+
+### Step 1 — Copy the theme module
+
+```
+src/theme/
+  qthemelib_global.h
+  ThemeManager.h / .cpp
+  ThemeRegistry.h / .cpp
+  qthemelib_resources.qrc   ← embeds QSS + icons
+  themes/
+    *.qss
+resources/
+  icons/
+    *.svg
+```
+
+### Step 2 — Add to CMakeLists.txt
+
+```cmake
+add_library(QThemeLib SHARED
+    src/theme/ThemeManager.cpp
+    src/theme/ThemeRegistry.cpp
+    src/theme/qthemelib_resources.qrc
+)
+target_compile_definitions(QThemeLib PRIVATE QTHEMELIB_LIBRARY)
+target_include_directories(QThemeLib PUBLIC src/theme)
+target_link_libraries(QThemeLib PUBLIC Qt6::Core Qt6::Widgets)
+
+target_link_libraries(YourApp PRIVATE QThemeLib)
+```
+
+---
+
 ## ➕ Adding a New Theme
 
 1. Create `src/theme/themes/my_theme.qss`
-2. Use any existing `.qss` as a template
-3. The theme is auto-discovered by `ThemeManager::initialize()` — no code changes needed
+2. Add it to `src/theme/qthemelib_resources.qrc`:
+   ```xml
+   <file alias="my_theme.qss">themes/my_theme.qss</file>
+   ```
+3. The theme is auto-discovered by `ThemeManager::initialize()` — no other code changes needed
 4. Optionally register metadata in `ThemeRegistry::registerBuiltinThemes()`:
 
 ```cpp
 reg.registerInfo({
-    "my_theme",           // key (matches filename without .qss)
+    "my_theme",           // key (matches alias without .qss)
     "My Theme",           // display name
     "Description here",   // description
     "light",              // category: "light", "dark", or "special"
@@ -227,12 +268,16 @@ Qt Style Sheets are powerful but have known limitations:
 qtheme_manager/
 ├── CMakeLists.txt
 ├── README.md
+├── build_debug.bat
 ├── resources/
-│   └── resources.qrc          # Embeds QSS files as Qt resources
+│   └── icons/                  # SVG icons (referenced by qthemelib_resources.qrc)
+│       └── *.svg
 └── src/
-    ├── theme/                  # ← Reusable module (copy this to your project)
+    ├── theme/                  # ← QThemeLib shared library
+    │   ├── qthemelib_global.h  # DLL export/import macro
     │   ├── ThemeManager.h/.cpp
     │   ├── ThemeRegistry.h/.cpp
+    │   ├── qthemelib_resources.qrc  # Embeds QSS + icons into the DLL
     │   └── themes/
     │       ├── light_minimal.qss
     │       ├── dark_pro.qss
@@ -241,7 +286,7 @@ qtheme_manager/
     │       ├── high_contrast.qss
     │       ├── blue_business.qss
     │       └── green_eye.qss
-    └── demo/                   # Demo application
+    └── demo/                   # Optional demo application (QTHEME_BUILD_DEMO=ON)
         ├── main.cpp
         ├── MainWindow.h/.cpp
         └── pages/
@@ -276,7 +321,6 @@ qtheme_manager/
 - [ ] Add SVG icon support for checkbox/radio indicators
 - [ ] Provide a `ThemeEditor` widget for live QSS editing
 - [ ] Add per-widget color token system (CSS variables approximation)
-- [ ] Support `.qrc`-embedded themes as primary loading path
 - [ ] Add `QWizard` and `QAbstractItemDelegate` styling examples
 - [ ] Provide a `ThemePreviewWidget` thumbnail generator
 - [ ] Dark/light mode auto-detection from OS settings (Qt 6.5+)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "qthemelib_global.h"
+
 #include <QString>
 #include <QStringList>
 #include <QMap>
@@ -12,7 +14,7 @@
  *
  * This is optional but useful for building theme picker UIs.
  */
-struct ThemeInfo
+struct QTHEMELIB_EXPORT ThemeInfo
 {
     QString key;          ///< Internal key, e.g. "dark_pro"
     QString displayName;  ///< Human-readable name, e.g. "Dark Pro"
@@ -23,7 +25,7 @@ struct ThemeInfo
     QString textColor;    ///< Primary text color hint
 };
 
-class ThemeRegistry
+class QTHEMELIB_EXPORT ThemeRegistry
 {
 public:
     static ThemeRegistry& instance();

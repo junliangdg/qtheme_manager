@@ -1,5 +1,7 @@
 #pragma once
 
+#include "qthemelib_global.h"
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -8,16 +10,25 @@
 /**
  * @brief ThemeManager - Singleton for managing and applying QSS themes.
  *
- * Usage:
- *   ThemeManager::instance().loadThemesFromDir(":/themes");
- *   ThemeManager::instance().applyTheme(qApp, "dark_pro");
+ * Themes are embedded inside QThemeLib.dll via Qt resources (:/themes/).
+ * No external .qss files are required at runtime.
  *
- * Integration in other projects:
- *   1. Add ThemeManager.h/cpp + ThemeRegistry.h/cpp to your project.
- *   2. Copy the themes/ directory (or embed via .qrc).
- *   3. Call ThemeManager::instance().initialize(...) at startup.
+ * Typical usage:
+ * @code
+ *   // Register metadata (optional, for UI pickers)
+ *   ThemeRegistry::registerBuiltinThemes();
+ *
+ *   // Load embedded themes (default path ":/themes" is used automatically)
+ *   ThemeManager::instance().initialize();
+ *
+ *   // Apply a theme
+ *   ThemeManager::instance().applyTheme(qApp, "dark_pro");
+ * @endcode
+ *
+ * When used as a Git submodule, link against QThemeLib and call the two
+ * lines above — no file copying needed.
  */
-class ThemeManager : public QObject
+class QTHEMELIB_EXPORT ThemeManager : public QObject
 {
     Q_OBJECT
 
@@ -28,9 +39,16 @@ public:
     static ThemeManager& instance();
 
     /**
-     * @brief Initialize with a directory containing .qss files.
-     *        Each .qss filename (without extension) becomes a theme name.
-     * @param themesDir  Path to directory, e.g. ":/themes" or "./themes"
+     * @brief Initialize from the embedded Qt resource path.
+     *
+     * Loads all .qss files from ":/themes" (compiled into the DLL).
+     * Call this once at application startup before applying any theme.
+     */
+    void initialize();
+
+    /**
+     * @brief Initialize with an explicit directory or Qt resource path.
+     * @param themesDir  e.g. ":/themes" (default) or an absolute filesystem path
      */
     void initialize(const QString& themesDir);
 
@@ -45,7 +63,7 @@ public:
     void registerThemeFile(const QString& name, const QString& filePath);
 
     /**
-     * @brief Load all .qss files from a directory and register them.
+     * @brief Load all .qss files from a directory (or Qt resource path) and register them.
      */
     void loadThemesFromDir(const QString& dirPath);
 
