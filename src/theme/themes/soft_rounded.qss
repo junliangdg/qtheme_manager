@@ -534,7 +534,7 @@ QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
     left: 14px;
-    top: -2px;
+    top: -4px;
     padding: 0 8px;
     background-color: #F0EEF8;
     color: #7C6FCD;
