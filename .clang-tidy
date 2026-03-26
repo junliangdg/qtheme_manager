@@ -1,0 +1,49 @@
+# ----------------------------------------------------
+# Modern Clang-Tidy Configuration
+# Supports C++14/17/20, UTF-8, modern C++ best practices
+# ----------------------------------------------------
+
+# Use checks from the clang-tidy modern style guidelines
+Checks: >
+  *,
+  -clang-analyzer-alpha.*,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -llvm-header-guard,
+  -fuchsia-*,
+  -hicpp-multiway-paths-covered,
+  -llvm-include-order
+
+# Enable warnings as errors (optional, comment if too strict)
+WarningsAsErrors: ''
+
+# Extra options
+CheckOptions:
+  # Use UTF-8 for encoding
+  - key: llvm-include-order.HeaderFileExtensions
+    value: 'h,hpp,hxx'
+    
+  # cppcoreguidelines options
+  - key: cppcoreguidelines-avoid-magic-numbers.IgnoreEnums
+    value: '1'
+  - key: cppcoreguidelines-avoid-magic-numbers.IgnoreConstants
+    value: '1'
+    
+  # readability options
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.VariableCase
+    value: lower_case
+  - key: readability-identifier-naming.ConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: m_
+
+# Format related options
+FormatStyle: file # Use .clang-format for consistent formatting
+
+# Miscellaneous
+HeaderFilterRegex: '.*' # Apply to all headers
+AnalyzeTemporaryDtors: true
+User: ''

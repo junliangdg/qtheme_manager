@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="arrow_down_dark.svg">icons/arrow_down_dark.svg</file>
+        <file alias="arrow_down_light.svg">icons/arrow_down_light.svg</file>
+        <file alias="arrow_up_dark.svg">icons/arrow_up_dark.svg</file>
+        <file alias="arrow_up_light.svg">icons/arrow_up_light.svg</file>
+        <file alias="check_white.svg">icons/check_white.svg</file>
+        <file alias="check_dark.svg">icons/check_dark.svg</file>
+        <file alias="radio_dot_white.svg">icons/radio_dot_white.svg</file>
+        <file alias="radio_dot_dark.svg">icons/radio_dot_dark.svg</file>
+        <file alias="branch_closed_dark.svg">icons/branch_closed_dark.svg</file>
+        <file alias="branch_open_dark.svg">icons/branch_open_dark.svg</file>
+        <file alias="branch_closed_light.svg">icons/branch_closed_light.svg</file>
+        <file alias="branch_open_light.svg">icons/branch_open_light.svg</file>
+        <file alias="close_dark.svg">icons/close_dark.svg</file>
+        <file alias="close_light.svg">icons/close_light.svg</file>
+        <file alias="undock_dark.svg">icons/undock_dark.svg</file>
+        <file alias="undock_light.svg">icons/undock_light.svg</file>
+        <file alias="toolbar_handle.svg">icons/toolbar_handle.svg</file>
+    </qresource>
+</RCC>

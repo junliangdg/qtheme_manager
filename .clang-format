@@ -1,0 +1,53 @@
+# ----------------------------------------
+# Modern Clang-Format for C/C++ Projects
+# Supports C++14/17/20, UTF-8 friendly
+# ----------------------------------------
+BasedOnStyle: LLVM
+Language: Cpp
+
+# Optional: leave Standard unspecified or set to lower version
+# Standard: Cpp17
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+
+# Spaces
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeAssignmentOperators: true
+SpaceAfterTemplateKeyword: true
+SpaceAfterLogicalNot: true
+
+# Alignment
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+AlignTrailingComments: true
+PointerAlignment: Left
+
+# Wrapping
+BinPackParameters: false
+BinPackArguments: false
+PenaltyBreakAssignment: 2
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000
+PenaltyReturnTypeOnItsOwnLine: 60
+
+# Comments
+ReflowComments: true
+AllowShortBlocksOnASingleLine: false
+
+# Misc
+DerivePointerAlignment: false
+IndentCaseLabels: true
+IndentGotoLabels: true
+MaxEmptyLinesToKeep: 1
