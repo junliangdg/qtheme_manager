@@ -306,13 +306,13 @@ qtheme_manager/
 
 | Theme | Preview |
 |-------|---------|
-| Dark Pro | *(run the demo)* |
-| Light Minimal | *(run the demo)* |
-| Glass Futuristic | *(run the demo)* |
-| Soft Rounded | *(run the demo)* |
-| High Contrast | *(run the demo)* |
-| Blue Business | *(run the demo)* |
-| Green Eye Care | *(run the demo)* |
+| Dark Pro | <a href="./docs/images/dark-pro.jpg"><img src="./docs/images/dark-pro.jpg" alt="Dark Pro" width="260" /></a> |
+| Light Minimal | <a href="./docs/images/light-minimal.jpg"><img src="./docs/images/light-minimal.jpg" alt="Light Minimal" width="260" /></a> |
+| Glass Futuristic | <a href="./docs/images/glass-futuristic.jpg"><img src="./docs/images/glass-futuristic.jpg" alt="Glass Futuristic" width="260" /></a> |
+| Soft Rounded | <a href="./docs/images/soft-rounded.jpg"><img src="./docs/images/soft-rounded.jpg" alt="Soft Rounded" width="260" /></a> |
+| High Contrast | <a href="./docs/images/high-contrast.jpg"><img src="./docs/images/high-contrast.jpg" alt="High Contrast" width="260" /></a> |
+| Blue Business | <a href="./docs/images/blue-business.jpg"><img src="./docs/images/blue-business.jpg" alt="Blue Business" width="260" /></a> |
+| Green Eye Care | <a href="./docs/images/green-eye-care.jpg"><img src="./docs/images/green-eye-care.jpg" alt="Green Eye Care" width="260" /></a> |
 
 ---
 
